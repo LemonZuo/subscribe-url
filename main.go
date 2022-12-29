@@ -38,6 +38,7 @@ const letterBytes = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVW
 const defaultPort int = 8002
 const defaultExpire = 180
 const defaultRedisConfig = "127.0.0.1:6379"
+const defaultRedisDB = 0
 
 const defaultLockPrefix = "myurls:lock:"
 const defaultRenewal = 1
@@ -62,6 +63,7 @@ func main() {
 	ttl := flag.Int("ttl", defaultExpire, "短链接有效期，单位(天)，默认180天。")
 	conn := flag.String("conn", defaultRedisConfig, "Redis连接，格式: host:port")
 	passwd := flag.String("passwd", "", "Redis连接密码")
+	db := flag.Int("db", defaultRedisDB, "Redis数据库")
 	https := flag.Int("https", 1, "是否返回 https 短链接")
 	flag.Parse()
 
@@ -76,7 +78,7 @@ func main() {
 		maxIdleTimeout: 30,
 		host:           *conn,
 		password:       *passwd,
-		db:             0,
+		db:             *db,
 		handleTimeout:  30,
 	}
 	initRedisPool()
